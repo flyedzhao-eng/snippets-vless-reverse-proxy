@@ -2,17 +2,16 @@
 const hostname = "https://snippets.neib.cn"
 
 function handleRequest(request) {
-  // 验证 WebSocket 连接
-  if (request.headers.get('Upgrade') !== 'websocket') {
-    return new Response('Access Denied', { status: 403 });
-  }
+  let url = new URL(request.url);
+  
+  // 检查是否为 WebSocket 请求
+  const upgrade = request.headers.get('Upgrade');
   
   try {
-    let url = new URL(request.url);
+    // 无论是 WebSocket 还是普通请求，都转发
     return fetch(new Request(hostname + url.pathname + url.search, request));
   } catch (error) {
-    // 添加错误处理
-    return new Response('Proxy Error', { status: 502 }); return new Response（'Proxy Error'， { status： 502 }）;
+    return new Response('Proxy Error', { status: 502 });
   }
 }
 
